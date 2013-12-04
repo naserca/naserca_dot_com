@@ -1,3 +1,8 @@
-name: Your New Jekyll Site
+name: naserca dot com
 markdown: redcarpet
 pygments: true
+exclude: [Rakefile, README.md, Gemfile, Gemfile.lock]
+assets: 
+  debug: true
+  cachebust: hard
+  gzip: false
