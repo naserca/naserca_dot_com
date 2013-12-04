@@ -1,9 +1,9 @@
 ////////// colors //////////
 
-$color_1:     rgb(3,168,171);
-$color_2:     rgb(255,189,27);
-$color_3:     rgb(2,125,17);
-$color_4:     rgb(45,45,45);
+$color-1:     rgb(255,189,27);
+$color-2:     rgb(3,168,171);
+$color-3:     rgb(2,125,17);
+$color-4:     rgb(45,45,45);
 
 ////////// defaults //////////
 
@@ -17,3 +17,89 @@ a {
   color: inherit;
 }
 
+.link {
+  position: relative;
+  height: 2.5rem;
+  font-size: 2.5rem;
+  display: block;
+
+  &:hover {
+    span {
+      top: 0;
+      left: 0;
+    }
+  }
+
+  &:active {
+    .color-2 span {
+      top: -2px;
+    }
+
+    .color-1 span {
+      top: 2px;
+    }
+  }
+}
+
+.bottom, .top {
+  position: absolute;
+}
+
+.color {
+  position: absolute;
+
+  span {
+    position: relative;
+    transition: 0.05s;
+  }
+}
+
+.top {
+  top: 0;
+}
+
+.color-2 {
+  color: $color-2;
+
+  .bottom {
+    z-index: 1;
+  }
+
+  .top {
+    z-index: 3;
+    opacity: 0.90;
+  }
+
+  span {
+    left: 2px;
+  }
+}
+
+.color-1 {
+  color: $color-1;
+
+  span {
+    left: -2px;
+  }
+
+  .bottom {
+    z-index: 2;
+  }
+
+  .top {
+    z-index: 4;
+    opacity: 0.4;
+  }
+}
+
+////////// cf //////////
+
+.cf:before,
+.cf:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+
+.cf:after {
+    clear: both;
+}
