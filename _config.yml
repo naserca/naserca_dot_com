@@ -6,3 +6,7 @@ assets:
   debug: true
   cachebust: hard
   gzip: false
+  sources:
+    - _assets
+    - _assets/scripts
+    - _assets/stylesheets
