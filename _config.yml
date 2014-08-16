@@ -1,6 +1,6 @@
 name: naserca dot com
 markdown: redcarpet
-pygments: true
+highlighter: pygments
 exclude: [Rakefile, README.md, Gemfile, Gemfile.lock]
 assets: 
   debug: true
