@@ -57,10 +57,12 @@ class NavItem
     navItem = this
     @elem.hover ->
       for letter in navItem.letters
+        letter.elem.css "transition", "transform 0.1s linear"
         letter.position = { top: 0, left: 0 }
         letter.isJiggling = false
     , ->
       for letter in navItem.letters
+        letter.elem.css "transition", ""
         letter.isJiggling = true
 
 class Container
