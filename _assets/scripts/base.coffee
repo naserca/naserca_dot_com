@@ -68,7 +68,6 @@ class NavItem
   createLetters: ->
     navItem = this
     letters = []
-    @elem.find('span').each (i, letter) ->
     @elem.find('span').each ->
       letter = new Letter
         elem: $(this)
