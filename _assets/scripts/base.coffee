@@ -21,27 +21,27 @@ stopAnimations = ->
 
 class Letter
 
-  transformCss: (newPosition) ->
-    "translate(#{newPosition.left}px,#{newPosition.top}px)"
+  transformCss: ->
+    "translate(#{@position.left}px,#{@position.top}px)"
 
   constructor: (args) ->
     @elem = args.elem
     @navItem = args.navItem
     @position = { top: 0, left: 0 }
+    @isJiggling = true
 
   animate: ->
-    newPosition = {
-      top: @position.top += _.random(-3, 3),
-      left: @position.left += _.random(-3, 3),
-    }
-    @elem.css "-webkit-transform", @transformCss(newPosition)
-
+    if @isJiggling
+      @position.top += _.random(-3, 3)
+      @position.left += _.random(-3, 3)
+    @elem.css "-webkit-transform", @transformCss()
 
 class NavItem
   constructor: (args) ->
     @elem = args.elem
     @container = args.container
     @letters = @createLetters()
+    @setupHoverHandler()
 
   createLetters: ->
     navItem = this
@@ -52,6 +52,13 @@ class NavItem
         navItem: navItem
       letters.push letter
     return letters
+
+  setupHoverHandler: ->
+    navItem = this
+    @elem.mouseover ->
+      for letter in navItem.letters
+        letter.position = { top: 0, left: 0 }
+        letter.isJiggling = false
 
 class Container
   constructor: (args) ->
