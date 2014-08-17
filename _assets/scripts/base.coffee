@@ -52,13 +52,24 @@ class NavItem
   constructor: (args) ->
     @elem = args.elem
     @container = args.container
+    @createCloneArmy()
     @letters = @createLetters()
     @setupHoverHandler()
+
+  createCloneArmy: ->
+    @elem.find('span').each ->
+      $span = $(this)
+      _(1).times ->
+        clone = $span.clone().appendTo $span
+        clone.css
+          position: 'absolute'
+          left: 0
 
   createLetters: ->
     navItem = this
     letters = []
     @elem.find('span').each (i, letter) ->
+    @elem.find('span').each ->
       letter = new Letter
         elem: $(this)
         navItem: navItem
