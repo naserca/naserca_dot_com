@@ -34,7 +34,7 @@ class Letter
     if @isJiggling
       @position.top += _.random(-3, 3)
       @position.left += _.random(-3, 3)
-    @elem.css "-webkit-transform", @transformCss()
+    @elem.css "transform", @transformCss()
 
 class NavItem
   constructor: (args) ->
