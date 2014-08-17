@@ -21,20 +21,30 @@ stopAnimations = ->
 
 class Letter
 
-  transformCss: ->
-    "translate(#{@position.left}px,#{@position.top}px)"
-
   constructor: (args) ->
     @elem = args.elem
     @navItem = args.navItem
     @position = { top: 0, left: 0 }
-    @isJiggling = true
+    @startJiggling()
 
   animate: ->
     if @isJiggling
       @position.top += _.random(-3, 3)
       @position.left += _.random(-3, 3)
     @elem.css "transform", @transformCss()
+
+  transformCss: ->
+    "translate(#{@position.left}px,#{@position.top}px)"
+
+  stopJiggling: ->
+    @elem.css "transition", "transform 0.1s linear"
+    @position = { top: 0, left: 0 }
+    @isJiggling = false
+
+  startJiggling: ->
+    @elem.css "transition", ""
+    @isJiggling = true
+
 
 class NavItem
   constructor: (args) ->
@@ -57,13 +67,10 @@ class NavItem
     navItem = this
     @elem.hover ->
       for letter in navItem.letters
-        letter.elem.css "transition", "transform 0.1s linear"
-        letter.position = { top: 0, left: 0 }
-        letter.isJiggling = false
+        letter.stopJiggling()
     , ->
       for letter in navItem.letters
-        letter.elem.css "transition", ""
-        letter.isJiggling = true
+        letter.startJiggling()
 
 class Container
   constructor: (args) ->
