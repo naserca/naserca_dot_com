@@ -55,10 +55,13 @@ class NavItem
 
   setupHoverHandler: ->
     navItem = this
-    @elem.mouseover ->
+    @elem.hover ->
       for letter in navItem.letters
         letter.position = { top: 0, left: 0 }
         letter.isJiggling = false
+    , ->
+      for letter in navItem.letters
+        letter.isJiggling = true
 
 class Container
   constructor: (args) ->
