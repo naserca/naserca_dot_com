@@ -28,13 +28,15 @@ class Letter
     @startJiggling()
 
   animate: ->
-    if @isJiggling
-      @position.top += _.random(-3, 3)
-      @position.left += _.random(-3, 3)
+    @randomizePosition() if @isJiggling
     @elem.css "transform", @transformCss()
 
   transformCss: ->
     "translate(#{@position.left}px,#{@position.top}px)"
+
+  randomizePosition: ->
+    @position.top += _.random(-2, 2)
+    @position.left += _.random(-2, 2)
 
   stopJiggling: ->
     @elem.css "transition", "transform 0.1s linear"
