@@ -52,14 +52,14 @@ class Letter
     @elem.css "transition", ""
     @isJiggling = true
 
-
 class NavItem
   constructor: (args) ->
     @elem = args.elem
     @container = args.container
+    @isNavigable = false
     @letters = []
     @createLetters()
-    @setupHoverHandler()
+    if Modernizr.touch then @setupTouchHandler() else @setupHoverHandler()
 
   createLetters: ->
     navItem = this
@@ -83,14 +83,32 @@ class NavItem
         isClone: true
       @letters.push clone
 
+  stopJiggling: ->
+    for letter in @letters
+      letter.stopJiggling()
+
+  startJiggling: ->
+    for letter in @letters
+      letter.startJiggling()
+
   setupHoverHandler: ->
     navItem = this
     @elem.hover ->
-      for letter in navItem.letters
-        letter.stopJiggling()
+      navItem.stopJiggling()
     , ->
-      for letter in navItem.letters
-        letter.startJiggling()
+      navItem.startJiggling()
+
+  setupTouchHandler: ->
+    navItem = this
+    $aTags = navItem.elem.find('a')
+
+    navItem.elem.click (ev) ->
+      if !navItem.isNavigable
+        navItem.stopJiggling()
+        navItem.isNavigable = true
+
+    $aTags.click (ev) ->
+      ev.preventDefault() if !navItem.isNavigable
 
 class Container
   constructor: (args) ->
@@ -117,6 +135,9 @@ class Container
 
 # init
 
-container = new Container
-  elem: $('ul')
-animate(container)
+$ ->
+  FastClick.attach(document.body)
+
+  container = new Container
+    elem: $('ul')
+  animate(container)
