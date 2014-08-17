@@ -26,6 +26,7 @@ class Letter
   constructor: (args) ->
     @elem = args.elem
     @navItem = args.navItem
+    @isClone = args.isClone
     @position = { top: 0, left: 0 }
     @startJiggling()
 
@@ -41,11 +42,13 @@ class Letter
     @position.left += _.random(-@jiggleDistance, @jiggleDistance)
 
   stopJiggling: ->
+    @elem.css "display", "none" if @isClone
     @elem.css "transition", "transform 0.1s linear"
     @position = { top: 0, left: 0 }
     @isJiggling = false
 
   startJiggling: ->
+    @elem.css "display", ""
     @elem.css "transition", ""
     @isJiggling = true
 
@@ -54,18 +57,9 @@ class NavItem
   constructor: (args) ->
     @elem = args.elem
     @container = args.container
-    @createCloneArmy()
-    @letters = @createLetters()
+    @letters = []
+    @createLetters()
     @setupHoverHandler()
-
-  createCloneArmy: ->
-    @elem.find('span').each ->
-      $span = $(this)
-      _(1).times ->
-        clone = $span.clone().appendTo $span
-        clone.css
-          position: 'absolute'
-          left: 0
 
   createLetters: ->
     navItem = this
@@ -74,8 +68,20 @@ class NavItem
       letter = new Letter
         elem: $(this)
         navItem: navItem
-      letters.push letter
-    return letters
+      navItem.letters.push letter
+      navItem.createCloneArmy(letter)
+
+  createCloneArmy: (letter) ->
+    _(2).times =>
+      $clone = letter.elem.clone().appendTo letter.elem
+      $clone.css
+        position: 'absolute'
+        left: 0
+      clone = new Letter
+        elem: $clone
+        navItem: this
+        isClone: true
+      @letters.push clone
 
   setupHoverHandler: ->
     navItem = this
