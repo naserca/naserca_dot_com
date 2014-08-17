@@ -21,6 +21,8 @@ stopAnimations = ->
 
 class Letter
 
+  jiggleDistance: 2
+
   constructor: (args) ->
     @elem = args.elem
     @navItem = args.navItem
@@ -35,8 +37,8 @@ class Letter
     "translate(#{@position.left}px,#{@position.top}px)"
 
   randomizePosition: ->
-    @position.top += _.random(-2, 2)
-    @position.left += _.random(-2, 2)
+    @position.top += _.random(-@jiggleDistance, @jiggleDistance)
+    @position.left += _.random(-@jiggleDistance, @jiggleDistance)
 
   stopJiggling: ->
     @elem.css "transition", "transform 0.1s linear"
