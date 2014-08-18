@@ -22,6 +22,7 @@ stopAnimations = ->
 class Letter
 
   jiggleDistance: 2
+  maxJiggle: { top: 4, left: 4 }
 
   constructor: (args) ->
     @elem = args.elem
@@ -38,8 +39,10 @@ class Letter
     "translate(#{@position.left}px,#{@position.top}px)"
 
   randomizePosition: ->
-    @position.top += _.random(-@jiggleDistance, @jiggleDistance)
-    @position.left += _.random(-@jiggleDistance, @jiggleDistance)
+    randomTop = @position.top + _.random(-@jiggleDistance, @jiggleDistance)
+    randomLeft = @position.left + _.random(-@jiggleDistance, @jiggleDistance)
+    @position.top = randomTop unless randomTop > @maxJiggle.top or randomTop < -@maxJiggle.top
+    @position.left = randomLeft unless randomLeft > @maxJiggle.left or randomLeft < -@maxJiggle.left
 
   stopJiggling: ->
     @elem.css "display", "none" if @isClone
