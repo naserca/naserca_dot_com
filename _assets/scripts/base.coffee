@@ -33,7 +33,7 @@ class Letter
 
   animate: ->
     @randomizePosition() if @isJiggling
-    @elem.css "transform", @transformCss()
+    @elem.style.transform = @transformCss()
 
   transformCss: ->
     "translate(#{@position.left}px,#{@position.top}px)"
@@ -45,14 +45,14 @@ class Letter
     @position.left = randomLeft # unless randomLeft > @maxJiggle.left or randomLeft < -@maxJiggle.left
 
   stopJiggling: ->
-    @elem.css "display", "none" if @isClone
-    @elem.css "transition", "transform 0.1s linear"
+    @elem.style.display = 'none' if @isClone
+    @elem.style.transition = 'transform 0.1s linear'
     @position = { top: 0, left: 0 }
     @isJiggling = false
 
   startJiggling: ->
-    @elem.css "display", ""
-    @elem.css "transition", ""
+    @elem.style.display = ''
+    @elem.style.transition = ''
     @isJiggling = true
 
 class NavItem
@@ -67,19 +67,20 @@ class NavItem
   createLetters: ->
     navItem = this
     letters = []
-    @elem.find('span').each ->
+    for $letter in @elem.querySelectorAll('span')
       letter = new Letter
-        elem: $(this)
+        elem: $letter
         navItem: navItem
       navItem.letters.push letter
       navItem.createCloneArmy(letter)
 
   createCloneArmy: (letter) ->
     _(2).times =>
-      $clone = letter.elem.clone().appendTo letter.elem
-      $clone.css
-        position: 'absolute'
-        left: 0
+      $clone = letter.elem.cloneNode(true)
+      letter.elem.appendChild $clone
+      $clone.style.position = 'absolute'
+      $clone.style.left = 0
+
       clone = new Letter
         elem: $clone
         navItem: this
@@ -96,10 +97,8 @@ class NavItem
 
   setupHoverHandler: ->
     navItem = this
-    @elem.hover ->
-      navItem.stopJiggling()
-    , ->
-      navItem.startJiggling()
+    @elem.onmouseover = -> navItem.stopJiggling()
+    @elem.onmouseout = ->  navItem.startJiggling()
 
   setupTouchHandler: ->
     navItem = this
@@ -115,19 +114,21 @@ class NavItem
 
 class Container
   constructor: (args) ->
-    @elem = args.elem
-    @width = @elem.width()
-    @height = @elem.height()
-    @offset = @elem.offset()
+    @elem = args.elem[0]
+    @width = @elem.offsetWidth
+    @height = @elem.offsetHeight
+    @offset =
+      top: @elem.offsetTop
+      left: @elem.offsetLeft
     @navItems = @createNavItems()
     @letters = @getLetters()
 
   createNavItems: ->
     navItems = []
     container = this
-    @elem.find('li').each (i, navItem) ->
+    for $li in @elem.querySelectorAll('li')
       navItem = new NavItem
-        elem: $(this)
+        elem: $li
         offset: container.offset
         container: container
       navItems.push navItem
@@ -138,9 +139,8 @@ class Container
 
 # init
 
-$ ->
-  FastClick.attach(document.body)
+FastClick.attach(document.body)
 
-  container = new Container
-    elem: $('ul')
-  animate(container)
+container = new Container
+  elem: document.querySelectorAll('ul')
+animate(container)
