@@ -110,14 +110,14 @@ class NavItem
 
   setupTouchHandler: ->
     navItem = this
-    $aTags = navItem.elem.find('a')
+    $aTags = navItem.elem.querySelectorAll('a')
 
-    navItem.elem.click (ev) ->
+    navItem.elem.onclick = ->
       if !navItem.isNavigable
         navItem.stopJiggling()
         navItem.isNavigable = true
 
-    $aTags.click (ev) ->
+    $aTags.onclick = (ev) ->
       ev.preventDefault() if !navItem.isNavigable
 
 class Container
