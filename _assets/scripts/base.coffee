@@ -19,9 +19,17 @@ stopAnimations = ->
 
 ########## classes ##########
 
+Utils =
+
+  random: (min, max) ->
+    if (!max)
+      max = min
+      min = 0
+    min + Math.floor(Math.random() * (max - min + 1))
+
 class Letter
 
-  jiggleDistance: 5
+  jiggleDistance: 3
   maxJiggle: { top: 4, left: 4 }
 
   constructor: (args) ->
@@ -39,8 +47,8 @@ class Letter
     "translate(#{@position.left}px,#{@position.top}px)"
 
   randomizePosition: ->
-    randomTop = @position.top + _.random(-@jiggleDistance, @jiggleDistance)
-    randomLeft = @position.left + _.random(-@jiggleDistance, @jiggleDistance)
+    randomTop = @position.top + Utils.random(-@jiggleDistance, @jiggleDistance)
+    randomLeft = @position.left + Utils.random(-@jiggleDistance, @jiggleDistance)
     @position.top = randomTop # unless randomTop > @maxJiggle.top or randomTop < -@maxJiggle.top
     @position.left = randomLeft # unless randomLeft > @maxJiggle.left or randomLeft < -@maxJiggle.left
 
@@ -75,7 +83,7 @@ class NavItem
       navItem.createCloneArmy(letter)
 
   createCloneArmy: (letter) ->
-    _(2).times =>
+    for i in [1..2]
       $clone = letter.elem.cloneNode(true)
       letter.elem.appendChild $clone
       $clone.style.position = 'absolute'
@@ -135,7 +143,8 @@ class Container
     return navItems
 
   getLetters: ->
-    _.flatten(_.pluck(@navItems, 'letters'))
+    arrayOfLetterArrays = (navItem.letters for navItem in @navItems)
+    arrayOfLetterArrays.reduce (a, b) -> a.concat(b)
 
 # init
 
