@@ -21,7 +21,7 @@ stopAnimations = ->
 
 class Letter
 
-  jiggleDistance: 2
+  jiggleDistance: 5
   maxJiggle: { top: 4, left: 4 }
 
   constructor: (args) ->
@@ -41,8 +41,8 @@ class Letter
   randomizePosition: ->
     randomTop = @position.top + _.random(-@jiggleDistance, @jiggleDistance)
     randomLeft = @position.left + _.random(-@jiggleDistance, @jiggleDistance)
-    @position.top = randomTop unless randomTop > @maxJiggle.top or randomTop < -@maxJiggle.top
-    @position.left = randomLeft unless randomLeft > @maxJiggle.left or randomLeft < -@maxJiggle.left
+    @position.top = randomTop # unless randomTop > @maxJiggle.top or randomTop < -@maxJiggle.top
+    @position.left = randomLeft # unless randomLeft > @maxJiggle.left or randomLeft < -@maxJiggle.left
 
   stopJiggling: ->
     @elem.css "display", "none" if @isClone
