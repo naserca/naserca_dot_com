@@ -96,10 +96,12 @@ class NavItem
       @letters.push clone
 
   stopJiggling: ->
+    @elem.style.zIndex = 1
     for letter in @letters
       letter.stopJiggling()
 
   startJiggling: ->
+    @elem.style.zIndex = 0
     for letter in @letters
       letter.startJiggling()
 
